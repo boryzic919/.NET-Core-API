@@ -22,7 +22,7 @@ namespace FavourAPI.Controllers
         [HttpPut]
         public ActionResult AddOffer([FromQuery]string userId, [FromBody] JobOfferDto companyProvider)
         {
-            this.offerService.AddJobOffer(companyProvider);
+            this.offerService.AddJobOffer(userId, companyProvider);
             return Ok();
         }
 
@@ -30,6 +30,7 @@ namespace FavourAPI.Controllers
         public ActionResult<List<JobOfferDto>> Get()
         {
             var jobList = offerService.GetAllOffers();
+            
 
             return Ok(jobList);
         }

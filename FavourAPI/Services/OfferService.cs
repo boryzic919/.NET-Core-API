@@ -19,9 +19,12 @@ namespace FavourAPI.Services
             this.mapper = mapper;
         }
 
-        public void AddJobOffer(JobOfferDto jobOffer)
+        public void AddJobOffer(string userId, JobOfferDto jobOffer)
         {
             var dbOffer = mapper.Map<JobOffer>(jobOffer);
+            var provider = dbContext.CompanyProviders.SingleOrDefault(u => u.Id == userId);
+
+            provider.Offers.Add(dbOffer);
 
             this.dbContext.JobOffers.Add(dbOffer);
             this.dbContext.SaveChanges();
@@ -30,6 +33,8 @@ namespace FavourAPI.Services
         public List<JobOfferDto> GetAllOffers()
         {
             var offers = dbContext.JobOffers.ToList();
+
+            // mahni neshta ot job modela- . inache se polzva samo DTO-to 
 
             return offers.Select(o => mapper.Map<JobOfferDto>(o)).ToList();
         }

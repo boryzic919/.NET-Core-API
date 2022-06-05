@@ -4,14 +4,16 @@ using FavourAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FavourAPI.Migrations
 {
     [DbContext(typeof(WorkFavourDbContext))]
-    partial class WorkFavourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190330123628_koiznae")]
+    partial class koiznae
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,30 +134,23 @@ namespace FavourAPI.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("OfficeId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyProviderId");
 
+                    b.HasIndex("OfficeId");
+
                     b.ToTable("Industries");
-                });
-
-            modelBuilder.Entity("FavourAPI.Models.IndustryPosition", b =>
-                {
-                    b.Property<string>("IndustryId");
-
-                    b.Property<string>("PositionId");
-
-                    b.HasKey("IndustryId", "PositionId");
-
-                    b.HasIndex("PositionId");
-
-                    b.ToTable("IndustryPositions");
                 });
 
             modelBuilder.Entity("FavourAPI.Models.JobOffer", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CompanyProviderId");
 
                     b.Property<string>("ConsumerId");
 
@@ -165,8 +160,6 @@ namespace FavourAPI.Migrations
 
                     b.Property<double>("Money");
 
-                    b.Property<string>("ProviderId");
-
                     b.Property<string>("ResultId");
 
                     b.Property<string>("StateValue");
@@ -175,15 +168,19 @@ namespace FavourAPI.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsumerId");
+                    b.HasIndex("CompanyProviderId");
 
-                    b.HasIndex("ProviderId");
+                    b.HasIndex("ConsumerId");
 
                     b.HasIndex("ResultId");
 
                     b.HasIndex("StateValue");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("JobOffers");
                 });
@@ -204,19 +201,6 @@ namespace FavourAPI.Migrations
                     b.HasIndex("CompanyProviderId");
 
                     b.ToTable("Offices");
-                });
-
-            modelBuilder.Entity("FavourAPI.Models.OfficeIndustry", b =>
-                {
-                    b.Property<string>("IndustryId");
-
-                    b.Property<string>("OfficeId");
-
-                    b.HasKey("IndustryId", "OfficeId");
-
-                    b.HasIndex("OfficeId");
-
-                    b.ToTable("OfficeIndustries");
                 });
 
             modelBuilder.Entity("FavourAPI.Models.Period", b =>
@@ -304,26 +288,17 @@ namespace FavourAPI.Migrations
 
                     b.Property<string>("CompanyProviderId");
 
+                    b.Property<string>("IndustryId");
+
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyProviderId");
 
+                    b.HasIndex("IndustryId");
+
                     b.ToTable("Positions");
-                });
-
-            modelBuilder.Entity("FavourAPI.Models.PositionSkills", b =>
-                {
-                    b.Property<string>("SkillId");
-
-                    b.Property<string>("PositionId");
-
-                    b.HasKey("SkillId", "PositionId");
-
-                    b.HasIndex("PositionId");
-
-                    b.ToTable("PositionSkills");
                 });
 
             modelBuilder.Entity("FavourAPI.Models.SexDb", b =>
@@ -347,11 +322,15 @@ namespace FavourAPI.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("PositionId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ConsumerId");
 
                     b.HasIndex("JobOfferId");
+
+                    b.HasIndex("PositionId");
 
                     b.ToTable("Skills");
                 });
@@ -454,30 +433,21 @@ namespace FavourAPI.Migrations
                     b.HasOne("FavourAPI.Models.CompanyProvider")
                         .WithMany("Industries")
                         .HasForeignKey("CompanyProviderId");
-                });
 
-            modelBuilder.Entity("FavourAPI.Models.IndustryPosition", b =>
-                {
-                    b.HasOne("FavourAPI.Models.Industry", "Industry")
-                        .WithMany("IndustryPositions")
-                        .HasForeignKey("IndustryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FavourAPI.Models.Position", "Position")
-                        .WithMany("IndustryPositions")
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("FavourAPI.Models.Office")
+                        .WithMany("Industries")
+                        .HasForeignKey("OfficeId");
                 });
 
             modelBuilder.Entity("FavourAPI.Models.JobOffer", b =>
                 {
+                    b.HasOne("FavourAPI.Models.CompanyProvider")
+                        .WithMany("Offers")
+                        .HasForeignKey("CompanyProviderId");
+
                     b.HasOne("FavourAPI.Models.Consumer")
                         .WithMany("Offers")
                         .HasForeignKey("ConsumerId");
-
-                    b.HasOne("FavourAPI.Models.CompanyProvider", "Provider")
-                        .WithMany("Offers")
-                        .HasForeignKey("ProviderId");
 
                     b.HasOne("FavourAPI.Models.CompletionResult", "Result")
                         .WithMany()
@@ -486,6 +456,10 @@ namespace FavourAPI.Migrations
                     b.HasOne("FavourAPI.Models.enums.JobOfferStateDb", "State")
                         .WithMany()
                         .HasForeignKey("StateValue");
+
+                    b.HasOne("FavourAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("FavourAPI.Models.Office", b =>
@@ -493,19 +467,6 @@ namespace FavourAPI.Migrations
                     b.HasOne("FavourAPI.Models.CompanyProvider", "CompanyProvider")
                         .WithMany("Offices")
                         .HasForeignKey("CompanyProviderId");
-                });
-
-            modelBuilder.Entity("FavourAPI.Models.OfficeIndustry", b =>
-                {
-                    b.HasOne("FavourAPI.Models.Industry", "Industry")
-                        .WithMany("OfficeIndustries")
-                        .HasForeignKey("IndustryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FavourAPI.Models.Office", "Office")
-                        .WithMany("OfficeIndustries")
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FavourAPI.Models.Period", b =>
@@ -547,19 +508,10 @@ namespace FavourAPI.Migrations
                     b.HasOne("FavourAPI.Models.CompanyProvider")
                         .WithMany("TargetedPositions")
                         .HasForeignKey("CompanyProviderId");
-                });
 
-            modelBuilder.Entity("FavourAPI.Models.PositionSkills", b =>
-                {
-                    b.HasOne("FavourAPI.Models.Position", "Position")
-                        .WithMany("PositionSkills")
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FavourAPI.Models.Skill", "Skill")
-                        .WithMany("PositionSkills")
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("FavourAPI.Models.Industry", "Industry")
+                        .WithMany("Positions")
+                        .HasForeignKey("IndustryId");
                 });
 
             modelBuilder.Entity("FavourAPI.Models.Skill", b =>
@@ -571,6 +523,10 @@ namespace FavourAPI.Migrations
                     b.HasOne("FavourAPI.Models.JobOffer")
                         .WithMany("RequiredSkills")
                         .HasForeignKey("JobOfferId");
+
+                    b.HasOne("FavourAPI.Models.Position", "Position")
+                        .WithMany("Skills")
+                        .HasForeignKey("PositionId");
                 });
 #pragma warning restore 612, 618
         }

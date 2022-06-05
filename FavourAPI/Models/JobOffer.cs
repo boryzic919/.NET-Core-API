@@ -1,6 +1,8 @@
 ﻿using FavourAPI.Models.enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,20 +22,16 @@ namespace FavourAPI.Models
 
         public DateTime TimePosted { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual CompanyProvider Provider { get; set; }
 
         public double Money { get; set; }
 
         public virtual ICollection<Application> Applications { get; set; }
 
-        public virtual  ICollection<Skill> RequiredSkills { get; set; }
+        public virtual ICollection<Skill> RequiredSkills { get; set; }
 
         public virtual JobOfferStateDb State { get; set; }
-
-        public virtual Consumer Consumer { get; set; }
-
-        public string Review { get; set; }
-
-        // tags
+        
+        public virtual CompletionResult Result { get;set; }
     }
 }

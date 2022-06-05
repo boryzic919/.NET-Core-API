@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FavourAPI.Models
 {
-    public class Skill
+    public class CompletionResult
     {
+        [ForeignKey("JobOffer")]
         public string Id { get; set; }
 
-        public string Name { get; set; }
-
-        public virtual IList<PositionSkills> PositionSkills { get; set; }
-
         public virtual Consumer Consumer { get; set; }
+
+        public string Review { get; set; }
     }
 }
