@@ -32,10 +32,12 @@ namespace FavourAPI.Models
 
         public string Token { get; set; }
 
+        public virtual Consumer Consumer { get; set; }
+
         public virtual PersonProvider PersonProvider { get; set; }
 
         public virtual CompanyProvider CompanyProvider { get; set; }
 
-        public bool CanProceedAfterLogin { get; set; }
+        public virtual PermissionMy PermissionMy { get; set; }
     }
 }

@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Remove="IJobOfferService.cs" />
+    <Compile Remove="Migrations\20190324095754_permissions.Designer.cs" />
     <Compile Remove="Models\Job.cs" />
     <Compile Remove="Models\JobOfferState.cs" />
   </ItemGroup>
@@ -17,6 +18,7 @@
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using FavourAPI.Models;
+﻿using FavourAPI.ApiModels;
+using FavourAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ namespace FavourAPI
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
+        UserDto Authenticate(string username, string password);
         IEnumerable<User> GetAll();
-        User GetById(string id);
-
-        User Create(User user, string password);
+        UserDto GetById(string id);
+        void UpdatePermissions(string userId, Action<PermissionMy> updater);
+        UserDto Create(UserDto userDto, string password);
         void Update(User user, string password = null);
         void Delete(int id);
     }

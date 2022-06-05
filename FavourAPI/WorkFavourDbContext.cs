@@ -51,6 +51,8 @@ namespace FavourAPI
 
         public DbSet<ApplicationStateDb> ApplicationStates { get; set; }
 
+        public DbSet<PermissionMy> PermissionMys { get; set; }
+
     }
 
 
