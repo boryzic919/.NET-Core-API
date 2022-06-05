@@ -31,5 +31,11 @@ namespace FavourAPI.Models
         public byte[] PasswordSalt { get; set; }
 
         public string Token { get; set; }
+
+        public virtual PersonProvider PersonProvider { get; set; }
+
+        public virtual CompanyProvider CompanyProvider { get; set; }
+
+        public bool CanProceedAfterLogin { get; set; }
     }
 }
