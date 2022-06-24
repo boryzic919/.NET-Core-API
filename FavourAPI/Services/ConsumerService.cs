@@ -27,6 +27,12 @@ namespace FavourAPI.Services
             var dbConsumer = mapper.Map<Consumer>(consumerData);
             dbConsumer.Id = userId;
 
+            var phoneNumberDb = this.dbContext.PhoneNumbers.FirstOrDefault(number => number.Label == consumerData.PhoneNumber);
+            if (phoneNumberDb != null)
+            {
+                dbConsumer.PhoneNumber = phoneNumberDb;
+            }
+
             var currentUser = this.dbContext.Users.SingleOrDefault(u => u.Id == userId);
             currentUser.PermissionMy.HasSufficientInfoConsumer = true;
 
@@ -50,6 +56,17 @@ namespace FavourAPI.Services
         {
             return consumer.FirstName != null && consumer.LastName != null && consumer.PhoneNumber != null;
         }
-      
+
+        public void SaveJobOffer(string userId, string jobOfferId)
+        {
+            this.dbContext.ConsumerJobOffers.Add(new ConsumerJobOffer()
+            {
+                JobOfferId = jobOfferId,
+                ConsumerId = userId
+            });
+
+            this.dbContext.SaveChanges();
+        }
+
     }
 }

@@ -22,6 +22,9 @@ namespace FavourAPI.Models
 
         public DateTime TimePosted { get; set; }
 
+        //[ForeignKey("User")]
+        //public string ProviderId {get; set;}
+
         public virtual CompanyProvider Provider { get; set; }
 
         public double Money { get; set; }
@@ -33,5 +36,8 @@ namespace FavourAPI.Models
         public virtual JobOfferStateDb State { get; set; }
         
         public virtual CompletionResult Result { get;set; }
+
+        public virtual ICollection<ConsumerJobOffer> ConsumerJobOffers { get; set; }
     }
 }
+        

@@ -84,12 +84,14 @@ namespace FavourAPI
             services.AddScoped<IPersonProviderService, PersonProviderService>();
             services.AddScoped<IConsumerService, ConsumerService>();
             services.AddScoped<IOfferService, OfferService>();
+            services.AddScoped<IOfficeService, OfficeService>();
 
 
             var connection = @"Server=.;Database=WorkFavour;Trusted_Connection=True;ConnectRetryCount=10;";
             services.AddDbContext<WorkFavourDbContext>
-            (options => 
-            options.UseLazyLoadingProxies().UseSqlServer(connection));
+            (options =>
+            options.UseLazyLoadingProxies().UseSqlServer(connection).EnableSensitiveDataLogging()
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
