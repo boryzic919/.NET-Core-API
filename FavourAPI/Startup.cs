@@ -44,11 +44,15 @@ namespace FavourAPI
             services.Configure<AppSettings>(appSettingsSection);
 
             var appSettings = appSettingsSection.Get<AppSettings>();
+
+            string domain = $"https://{Configuration["Auth0:Domain"]}";
+
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
+
+            services.AddAuthentication(opt =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(x =>
             {
@@ -76,6 +80,7 @@ namespace FavourAPI
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+
             });
 
             // configure DI for application services
